@@ -3,12 +3,21 @@ package GUI;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Button;
+
+import java.awt.FileDialog;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.wb.swt.SWTResourceManager;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import Data.Person;
 
@@ -35,6 +44,7 @@ public class firstGUIWindow {
 	private Label Hausnummerout;
 	private Label Postleitzahlout;
 	private Label ortout;
+	private Button btnLoad;
 
 	/**
 	 * Launch the application.
@@ -219,6 +229,41 @@ public class firstGUIWindow {
 		ortout = new Label(shlFrWindow, SWT.NONE);
 		ortout.setBackground(SWTResourceManager.getColor(SWT.COLOR_YELLOW));
 		ortout.setBounds(428, 348, 123, 20);
+		
+		Button btnJson = new Button(shlFrWindow, SWT.NONE);
+		btnJson.setText("Json");
+		btnJson.setBounds(467, 425, 64, 42);
+		
+		btnLoad = new Button(shlFrWindow, SWT.NONE);
+		btnLoad.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+			org.eclipse.swt.widgets.FileDialog fd = new org.eclipse.swt.widgets.FileDialog(shlFrWindow, SWT .OPEN);
+			fd.setFilterExtensions(new String[] {"humptydumpty"});
+			fd.setFilterPath("%TEMP%");
+			fd.open();
+			
+			}
+		});
+		btnLoad.setBounds(461, 473, 90, 30);
+		btnLoad.setText("Load");
+	    btnJson.addSelectionListener( new SelectionAdapter() {
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+			Gson gson = new GsonBuilder().setPrettyPrinting().create();
+			System.out.println(gson.toJson(Person.getListe()));
+			try {
+			File jsonFile = File.createTempFile("wpfinf-json-", ".humptydumpty");
+			FileWriter fw = new FileWriter(jsonFile);
+			gson.toJson(Person.getListe(), fw);
+			fw.flush();
+			fw.close();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+			
+		}
+		});
 		shlFrWindow.setTabList(new Control[]{btnUselessButton, TitelTF, VornameTF, NachnameTF, StrasseTF, HausnummerTF, PLZTF, ortTF});
 
 	}
