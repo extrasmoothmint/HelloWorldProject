@@ -62,4 +62,13 @@ public String toString() {
 public static ArrayList<Person> getListe() {
 	return Liste;
 }
+public static void setListe(ArrayList<Person> personenListe) {
+	// TODO Auto-generated method stub
+	
 }
+
+
+
+	
+}
+
